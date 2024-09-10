@@ -1,6 +1,11 @@
 import {model, Schema, type InferSchemaType } from 'mongoose'
 
 const userSchema = new Schema({
+    _id: {
+        type: Schema.Types.ObjectId,
+        unique: true,
+        required: true
+    },
     username: {
         type: String,
         unique: false,
