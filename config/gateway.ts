@@ -41,7 +41,6 @@ class GatewayClient {
     };
 
     private handleData = (data: Buffer) => {
-        logger.info(`Received data: ${data.toString()}`);
         createEntry(data);
     };
 

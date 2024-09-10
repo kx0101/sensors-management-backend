@@ -16,11 +16,7 @@ export const createEntry = (data: Buffer) => {
     let key = JSON.stringify(parsedData)
     let currentDate = Date.now()
 
-    let lastAdded = sensorCache.get(key);
-    if (!lastAdded) {
-        return
-    }
-
+    let lastAdded = sensorCache.get(key)!;
     if (currentDate - lastAdded <= 60000) {
         return
     }
