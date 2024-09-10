@@ -1,6 +1,0 @@
-10-09-2024-11:50 [error]: Server is running on port 3000
-10-09-2024-11:55 [error]: Server is running on port 3000
-10-09-2024-11:55 [error]: Server is running on port 3000
-10-09-2024-14:20 [error]: Error: MongooseServerSelectionError: Server selection timed out after 30000 ms
-10-09-2024-14:57 [error]: JWT validation error: JSON Parse error: Unexpected identifier "z"
-10-09-2024-15:00 [error]: JWT validation error: invalid signature
