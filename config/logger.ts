@@ -15,7 +15,7 @@ const myFormat = printf(({ level, message, timestamp }: LoggerMessage) => {
 export const logger = createLogger({
     format: combine(
         timestamp({
-            format: `DD-MM-YYYY-HH:mm`
+            format: `DD-MM-YYYY-HH:mm:ss`
         }),
         myFormat,
         colorize({

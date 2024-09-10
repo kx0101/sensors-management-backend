@@ -6,6 +6,7 @@ import { errorHandler, notFound } from './middleware/errorMiddleware';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServer } from '@apollo/server';
 import { typeDefs, resolvers } from './config/apollo';
+import { gatewayClient } from './config/gateway';
 
 const app = express();
 
@@ -18,6 +19,7 @@ apolloServer.start().then(() => {
     logger.info('Apollo Server is running on /graphql');
 
     connectDB();
+    gatewayClient.connect();
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));

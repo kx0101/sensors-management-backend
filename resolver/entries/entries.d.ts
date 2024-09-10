@@ -8,4 +8,4 @@ export interface EntryCreate {
     address: string
     sensor: number
     value: number
-  }
+}
