@@ -25,4 +25,4 @@ const entrySchema = new Schema({
 },{timestamps: true})
 
 export type Entry = InferSchemaType<typeof entrySchema>
-export const Entry = model('Entry', entrySchema)
+export const EntryRepo = model('Entry', entrySchema)
