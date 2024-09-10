@@ -1,7 +1,7 @@
 import express from 'express';
 import { connectDB } from './config/db'
 import { logger } from './config/logger'
-import { router as liakosRoutes } from './routes/liakosRoutes'
+import { router as userRoutes } from './routes/userRoutes'
 import { errorHandler, notFound } from './middleware/errorMiddleware';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServer } from '@apollo/server';
@@ -22,7 +22,7 @@ apolloServer.start().then(() => {
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
 
-    app.use('/v1/liakos', liakosRoutes);
+    app.use('/v1/users', userRoutes);
 
     app.use(notFound);
     app.use(errorHandler);
