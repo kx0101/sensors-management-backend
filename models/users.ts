@@ -1,14 +1,9 @@
-import {model, Schema, type InferSchemaType } from 'mongoose'
+import { model, Schema, type InferSchemaType } from 'mongoose'
 
 const userSchema = new Schema({
-    _id: {
-        type: Schema.Types.ObjectId,
-        unique: true,
-        required: true
-    },
     username: {
         type: String,
-        unique: false,
+        unique: true,
         required: true
     },
     password: {
@@ -24,4 +19,4 @@ const userSchema = new Schema({
 })
 
 export type User = InferSchemaType<typeof userSchema>
-export const User = model('User', userSchema)
+export const UserRepo = model('User', userSchema)

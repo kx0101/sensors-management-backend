@@ -1,10 +1,11 @@
 import type { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import bcrypt from 'bcrypt';
-import { User } from "../models/users";
+import { type User } from "../models/users";
 import { generateToken } from "../utils/jwt";
+import { userResolvers } from "../resolver/users/userResolves";
 
-export const liakos = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
@@ -13,7 +14,7 @@ export const liakos = async (req: Request, res: Response) => {
         })
     }
 
-    const user: User = User.findOne({ username });
+    const user: User | null = await userResolvers.Query.userByUsername(username);
 
     if (!user) {
         return res.status(StatusCodes.NOT_FOUND).json({
@@ -27,7 +28,7 @@ export const liakos = async (req: Request, res: Response) => {
         })
     }
 
-    let token = generateToken(user.username)
+    let token = generateToken(user.username, user.role)
     res.header(process.env.JWT_HEADER ?? 'jwt-secret', token)
 
     return res.status(StatusCodes.OK).json({
@@ -36,3 +37,9 @@ export const liakos = async (req: Request, res: Response) => {
         token
     })
 };
+
+export const admin = async (_req: Request, res: Response) => {
+    return res.status(StatusCodes.OK).json({
+        message: "Admin page"
+    })
+}

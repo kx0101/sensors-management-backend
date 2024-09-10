@@ -1,34 +1,35 @@
-import type { Request } from 'express';
-import jwt from 'jsonwebtoken'
+import jwt, { type JwtPayload } from 'jsonwebtoken';
+import { logger } from '../config/logger';
 
 type TokenData = {
-    time: Date,
-    userId: string,
+    time: Date;
+    username: string;
+    role: string;
+};
+
+interface CustomJwtPayload extends JwtPayload {
+    username: string;
 }
 
 const jwtSecretKey: string = process.env.JWT_SECRET_KEY ?? 'SECRET';
 
-export const generateToken = (userId: string) => {
+export const generateToken = (username: string, role: string) => {
     let data: TokenData = {
         time: new Date(),
-        userId,
-    }
+        username,
+        role
+    };
 
     return jwt.sign(data, jwtSecretKey, {
-        expiresIn: '24h'
-    })
-}
+        expiresIn: '24h',
+    });
+};
 
-export const validateToken = (userId: string, req: Request): boolean => {
-    const token = req.header(process.env.JWT_HEADER ?? 'jwt-secret')
-    if (!token) {
-        return false;
+export const validateToken = (token: string): CustomJwtPayload | null => {
+    try {
+        return jwt.verify(token, jwtSecretKey) as CustomJwtPayload;
+    } catch (error) {
+        logger.error("JWT validation error:", error);
+        return null;
     }
-
-    const decoded = jwt.verify(token, jwtSecretKey);
-    if (decoded.id != userId) {
-        return false;
-    }
-
-    return true;
-}
+};
