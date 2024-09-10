@@ -59,4 +59,4 @@ const sensorSchema = new Schema({
 })
 
 export type Sensor = InferSchemaType<typeof sensorSchema>
-export const Sensor = model('Sensor', sensorSchema)
+export const SensorRepo = model('Sensor', sensorSchema)
