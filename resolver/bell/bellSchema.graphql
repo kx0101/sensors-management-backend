@@ -1,0 +1,12 @@
+type Query {
+  bell:Bell
+}
+
+type Mutation {
+  bellUpdate(bellInput: BellUpdate!): Bell
+}
+
+input BellUpdate {
+  _id: ID!
+  status: Boolean
+}

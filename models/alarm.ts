@@ -33,4 +33,4 @@ const alarmSchema = new Schema({
 })
 
 export type Alarm = InferSchemaType<typeof alarmSchema>
-export const Alarm = model('Alarm', alarmSchema)
+export const AlarmRepo = model('Alarm', alarmSchema)
