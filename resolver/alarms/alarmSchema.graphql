@@ -1,40 +1,39 @@
 type Query {
-  alarms: [Alarm]
-  alarm(sensor:SensorInput!): [Alarm]
+	alarms: [Alarm]
+	alarm(sensor: SensorInput!): [Alarm]
 }
 
 type Mutation {
-  createAlarm(alarmInput: AlarmCreate!): Alarm
-  updateAlarm(alarmInput: AlarmUpdate!): Alarm
-  deleteAlarms(period: SensorID!):String
+	createAlarm(alarmInput: AlarmCreate!): Alarm
+	updateAlarm(alarmInput: AlarmUpdate!): Alarm
+	deleteAlarms(period: SensorID!): String
 }
 
 type Alarm {
-  _id: ID!
-  address: String!
-  sensor: Int!
-  reason: String
-  aknowledged: Boolean
-  createdAt: String
-  updatedAt: String 
+	_id: ID!
+	address: String!
+	sensor: Int!
+	reason: String
+	aknowledged: Boolean
+	createdAt: String
+	updatedAt: String
 }
 
-
 input SensorInput {
-  id: ID!
+	id: ID!
 }
 
 input AlarmCreate {
-  address: String!
-  sensor: Int!
-  reason: String!
+	address: String!
+	sensor: Int!
+	reason: String!
 }
 
 input AlarmUpdate {
-  _id: ID!
-  aknowledged: Boolean
+	_id: ID!
+	aknowledged: Boolean
 }
 
-input SensorID{
-  sensor: ID!
+input SensorID {
+	sensor: ID!
 }

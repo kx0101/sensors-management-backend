@@ -1,17 +1,17 @@
 type Query {
-  bell:Bell
+	bell: Bell
 }
 
 type Mutation {
-  bellUpdate(bellInput: BellUpdate!): Bell
+	bellUpdate(bellInput: BellUpdate!): Bell
 }
 
-type Bell{
-  _id: ID!
-  status: Boolean!
+type Bell {
+	_id: ID!
+	status: Boolean!
 }
 
 input BellUpdate {
-  _id: ID!
-  status: Boolean
+	_id: ID!
+	status: Boolean
 }

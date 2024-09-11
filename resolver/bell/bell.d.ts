@@ -1,4 +1,4 @@
 export interface BellUpdate {
-    _id: string
-    status: boolean
+	_id: string;
+	status: boolean;
 }

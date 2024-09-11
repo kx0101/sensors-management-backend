@@ -8,5 +8,5 @@ const bellSchema = new Schema({
 	},
 });
 
-export type Bell = InferSchemaType<typeof bellSchema>
-export const BellRepo = model('Bell', bellSchema)
+export type Bell = InferSchemaType<typeof bellSchema>;
+export const BellRepo = model("Bell", bellSchema);
