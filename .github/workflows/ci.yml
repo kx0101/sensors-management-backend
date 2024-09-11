@@ -39,7 +39,7 @@ jobs:
               run: bun run lint:check
 
             - name: Run TypeScript
-              run: bun run type-check
+              run: bun run type:check
 
             # - name: Run Tests
             #   run: bun run test
