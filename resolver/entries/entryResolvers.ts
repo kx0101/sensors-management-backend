@@ -1,3 +1,4 @@
+import { logger } from "../../config/logger.ts";
 import { EntryRepo, type Entry } from "../../models/entry";
 import type { EntryCreate, EntryID } from "./entries.d.ts";
 
@@ -8,7 +9,7 @@ export const entriesResolvers = {
 				sensor: sensor.sensor,
 				address: sensor.address,
 			}).catch((err: Error) => {
-				console.log(err.message);
+				logger.error(err.message);
 			});
 
 			if (!res) return [];
@@ -24,7 +25,7 @@ export const entriesResolvers = {
 				value: entryInput.value,
 				expireAt: Date.now(),
 			}).catch((err: Error) => {
-				console.log(err.message);
+				logger.error(err.message);
 			});
 
 			return entry;
