@@ -5,6 +5,11 @@ export const connectDB = async () => {
 	try {
 		const conn = await mongoose.connect(process.env.MONGODB_URL ?? "", {
 			replicaSet: "rs0",
+			dbName: "sensors",
+			auth: {
+				username: process.env.MONGODB_USERNAME,
+				password: process.env.MONGODB_PASSWORD,
+			},
 		});
 
 		logger.info(
