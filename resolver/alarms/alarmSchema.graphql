@@ -9,6 +9,17 @@ type Mutation {
   deleteAlarms(period: SensorID!):String
 }
 
+type Alarm {
+  _id: ID!
+  address: String!
+  sensor: Int!
+  reason: String
+  aknowledged: Boolean
+  createdAt: String
+  updatedAt: String 
+}
+
+
 input SensorInput {
   id: ID!
 }
