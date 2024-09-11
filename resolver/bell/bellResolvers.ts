@@ -9,7 +9,10 @@ export const bellResolvers = {
 		},
 	},
 	Mutation: {
-		bellUpdate: async (bellInput: BellUpdate) => {
+		bellUpdate: async (
+			_: unknown,
+			{ bellInput }: { bellInput: BellUpdate },
+		) => {
 			return await BellRepo.findByIdAndUpdate(bellInput._id, {
 				status: bellInput.status,
 			}).catch((err: Error) => {

@@ -13,7 +13,7 @@ const app = express();
 const apolloServer = new ApolloServer({
 	typeDefs,
 	resolvers,
-	introspection: false,
+	introspection: true,
 });
 const PORT = process.env.PORT || 3000;
 

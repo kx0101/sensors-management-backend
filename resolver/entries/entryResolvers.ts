@@ -4,7 +4,7 @@ import type { EntryCreate, EntryID } from "./entries.d.ts";
 
 export const entriesResolvers = {
 	Query: {
-		entries: async (sensor: Entry) => {
+		entries: async (_: unknown, { sensor }: { sensor: Entry }) => {
 			const res = await EntryRepo.find({
 				sensor: sensor.sensor,
 				address: sensor.address,
@@ -18,7 +18,10 @@ export const entriesResolvers = {
 		},
 	},
 	Mutation: {
-		createEntry: async (entryInput: EntryCreate) => {
+		createEntry: async (
+			_: unknown,
+			{ entryInput }: { entryInput: EntryCreate },
+		) => {
 			const entry = await EntryRepo.create({
 				address: entryInput.address,
 				sensor: entryInput.sensor,
@@ -30,7 +33,10 @@ export const entriesResolvers = {
 
 			return entry;
 		},
-		deleteEntries: async (entryInput: EntryID) => {
+		deleteEntries: async (
+			_: unknown,
+			{ entryInput }: { entryInput: EntryID },
+		) => {
 			const date = new Date();
 			const pastDate = new Date(date.getDate() - entryInput.period);
 

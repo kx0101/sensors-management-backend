@@ -23,10 +23,12 @@ export const createEntry = (data: Buffer) => {
 
 	sensorCache.set(key, currentDate);
 
-	const entry = entriesResolvers.Mutation.createEntry({
-		address: parsedData.address,
-		sensor: parsedData.id,
-		value: parsedData.value,
+	const entry = entriesResolvers.Mutation.createEntry(null, {
+		entryInput: {
+			address: parsedData.address,
+			sensor: parsedData.type,
+			value: parsedData.value,
+		},
 	});
 
 	logger.info(entry);

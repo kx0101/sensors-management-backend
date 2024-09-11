@@ -15,12 +15,15 @@ export const alarmResolvers = {
 			});
 			return result;
 		},
-		alarm: async ({ sensor }: { sensor: SensorInput }) => {
+		alarm: async (_: unknown, { sensor }: { sensor: SensorInput }) => {
 			return await AlarmRepo.find({ sensor: sensor.id });
 		},
 	},
 	Mutation: {
-		createAlarm: async (alarmInput: AlarmCreate) => {
+		createAlarm: async (
+			_: unknown,
+			{ alarmInput }: { alarmInput: AlarmCreate },
+		) => {
 			const alarm = await AlarmRepo.create({
 				address: alarmInput.address,
 				sensor: alarmInput.sensor,
@@ -30,7 +33,10 @@ export const alarmResolvers = {
 			});
 			return alarm;
 		},
-		updateAlarm: async (alarmInput: AlarmUpdate) => {
+		updateAlarm: async (
+			_: unknown,
+			{ alarmInput }: { alarmInput: AlarmUpdate },
+		) => {
 			const data = { ...alarmInput };
 			const updateAlarm = await AlarmRepo.findOneAndUpdate(
 				{ _id: alarmInput._id },
@@ -41,7 +47,7 @@ export const alarmResolvers = {
 			});
 			return updateAlarm;
 		},
-		deleteAlarms: async (sensor: SensorID) => {
+		deleteAlarms: async (_: unknown, { sensor }: { sensor: SensorID }) => {
 			const deleteAlarms = await AlarmRepo.deleteMany({
 				sensor: sensor.sensor,
 			});

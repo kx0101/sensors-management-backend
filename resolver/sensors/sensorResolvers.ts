@@ -7,8 +7,7 @@ export const sensorsResolvers = {
 		sensors: async () => {
 			return await SensorRepo.find();
 		},
-		sensor: async (location: string) => {
-			console.log(location);
+		sensor: async (_: unknown, { location }: { location: string }) => {
 			return await SensorRepo.findOne({ location: location }).catch(
 				(err: Error) => {
 					logger.error(err.message);
@@ -17,7 +16,10 @@ export const sensorsResolvers = {
 		},
 	},
 	Mutation: {
-		createSensor: async (sensorInput: SensorCreate) => {
+		createSensor: async (
+			_: unknown,
+			{ sensorInput }: { sensorInput: SensorCreate },
+		) => {
 			const sensor = await SensorRepo.create(sensorInput).catch(
 				(err: Error) => {
 					logger.error(err.message);
@@ -25,7 +27,10 @@ export const sensorsResolvers = {
 			);
 			return sensor;
 		},
-		updateSensor: async (sensorInput: SensorUpdate) => {
+		updateSensor: async (
+			_: unknown,
+			{ sensorInput }: { sensorInput: SensorUpdate },
+		) => {
 			const data = { ...sensorInput };
 			const updateSensor = await SensorRepo.findOneAndUpdate(
 				{ _id: sensorInput._id },
@@ -36,7 +41,7 @@ export const sensorsResolvers = {
 			});
 			return updateSensor;
 		},
-		deleteSensor: async (_id: string) => {
+		deleteSensor: async (_: unknown, { _id }: { _id: string }) => {
 			const deleteSensor = await SensorRepo.findOneAndDelete({
 				_id: _id,
 			}).catch((err: Error) => {

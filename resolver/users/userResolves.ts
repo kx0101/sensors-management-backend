@@ -5,10 +5,16 @@ export const userResolvers = {
 		users: async (): Promise<User[]> => {
 			return await UserRepo.find();
 		},
-		user: async (id: string): Promise<User | null> => {
+		user: async (
+			_: unknown,
+			{ id }: { id: string },
+		): Promise<User | null> => {
 			return await UserRepo.findById(id);
 		},
-		userByUsername: async (username: string): Promise<User | null> => {
+		userByUsername: async (
+			_: unknown,
+			{ username }: { username: string },
+		): Promise<User | null> => {
 			return await UserRepo.findOne({ username });
 		},
 	},

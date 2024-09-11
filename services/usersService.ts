@@ -8,8 +8,9 @@ export const loginUser = async (username: string, password: string) => {
 		throw new Error("Username and password must be provided");
 	}
 
-	const user: User | null =
-		await userResolvers.Query.userByUsername(username);
+	const user: User | null = await userResolvers.Query.userByUsername(null, {
+		username: username,
+	});
 
 	if (!user) {
 		throw new Error("User not found");
