@@ -3,9 +3,9 @@
 	"module": "index.ts",
 	"scripts": {
 		"format": "prettier --write .",
-		"lint-fix": "eslint . --fix",
-		"lint-check": "eslint .",
-		"type-check": "tsc --noEmit",
+		"lint:fix": "eslint . --fix",
+		"lint:check": "eslint .",
+		"type:check": "tsc --noEmit",
 		"format:check": "prettier --check .",
 		"prepare": "husky"
 	},
