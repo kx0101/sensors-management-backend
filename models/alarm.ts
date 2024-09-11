@@ -1,36 +1,43 @@
-import { model, Schema, type InferSchemaType } from 'mongoose'
+import { model, Schema, type InferSchemaType } from "mongoose";
 
-const alarmSchema = new Schema({
-    address:{
-        type: String,
-        unique: false,
-        required: true
-    },
-    sensor: {
-        type: Number,
-        unique: false,
-        required: true
-      },
-      value: {
-        type: Number,
-        unique: false,
-        required: true
-      },
-      reason: {
-        type: String,
-        unique: false,
-        required: false
-      },
-      aknowledged: {
-        type: Boolean,
-        unique: false,
-        required: false
-      }
-      
-},{
-  timestamps: true,
-  expires: 24 * 60 * 60 * 1000,
-})
+const alarmSchema = new Schema(
+	{
+		address: {
+			type: String,
+			unique: false,
+			required: true,
+		},
+		sensor: {
+			type: Number,
+			unique: false,
+			required: true,
+		},
+		value: {
+			type: Number,
+			unique: false,
+			required: true,
+		},
+		reason: {
+			type: String,
+			unique: false,
+			required: false,
+		},
+		aknowledged: {
+			type: Boolean,
+			unique: false,
+			required: false,
+		},
+	},
+	{
+		timestamps: true,
+		expires: 24 * 60 * 60 * 1000,
+	},
+);
 
+<<<<<<< HEAD
 export type Alarm = InferSchemaType<typeof alarmSchema>
 export const AlarmRepo = model('Alarm', alarmSchema)
+=======
+export type Alarm = InferSchemaType<typeof alarmSchema>;
+export const Alarm = model("Alarm", alarmSchema);
+>>>>>>> c9572c17e8b9e6eb730f997677a40bd7347b8ea5
