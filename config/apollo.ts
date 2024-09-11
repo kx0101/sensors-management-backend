@@ -1,24 +1,21 @@
-import { mergeTypeDefs, mergeResolvers } from "@graphql-tools/merge";
-import { loadFilesSync } from "@graphql-tools/load-files";
-import path from "path";
+import { bellType } from "../resolver/bell/bellSchema";
+import { entryType } from "../resolver/entries/entrySchema";
+import { sensorType } from "../resolver/sensors/sensorSchema";
+import { userType } from "../resolver/users/userSchema";
+import { alarmType } from "../resolver/alarms/alarmTypes";
+import { alarmResolvers } from "../resolver/alarms/alarmResolvers";
+import { bellResolvers } from "../resolver/bell/bellResolvers";
+import { entriesResolvers } from "../resolver/entries/entryResolvers";
+import { sensorsResolvers } from "../resolver/sensors/sensorResolvers";
+import { userResolvers } from "../resolver/users/userResolves";
 
-const typeDefsArray = loadFilesSync(
-	path.join(__dirname, "../resolver/**/*.graphql"),
-	{
-		recursive: true,
-		extensions: ["graphql"],
-	},
-);
-
-const resolversArray = loadFilesSync(
-	path.join(__dirname, "../resolver/**/*.ts"),
-	{
-		recursive: true,
-		extensions: ["graphql"],
-	},
-);
-
-const typeDefs = mergeTypeDefs(typeDefsArray);
-const resolvers = mergeResolvers(resolversArray);
+const typeDefs = [alarmType, bellType, entryType, sensorType, userType];
+const resolvers = [
+	alarmResolvers,
+	bellResolvers,
+	entriesResolvers,
+	sensorsResolvers,
+	userResolvers,
+];
 
 export { typeDefs, resolvers };
