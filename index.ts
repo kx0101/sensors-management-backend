@@ -10,18 +10,21 @@ import { gatewayClient } from "./config/gateway";
 
 const app = express();
 
-const apolloServer = new ApolloServer({ typeDefs, resolvers });
+const apolloServer = new ApolloServer({
+	typeDefs,
+	resolvers,
+	introspection: false,
+});
 const PORT = process.env.PORT || 3000;
 
-apolloServer.start().then(() => {
-	app.use("/graphql", expressMiddleware(apolloServer));
+apolloServer.start().then(async () => {
+	app.use("/graphql", express.json(), expressMiddleware(apolloServer));
 
 	logger.info("Apollo Server is running on /graphql");
 
 	connectDB();
 	gatewayClient.connect();
 
-	app.use(express.json());
 	app.use(express.urlencoded({ extended: true }));
 
 	app.use("/v1/users", userRoutes);

@@ -33,6 +33,7 @@
 		"@types/mongoose": "^5.11.97",
 		"@typescript-eslint/eslint-plugin": "^8.5.0",
 		"@typescript-eslint/parser": "^8.5.0",
+		"apollo-server-express": "^3.13.0",
 		"bcrypt": "^5.1.1",
 		"binary-parser": "^2.2.1",
 		"eslint": "^9.10.0",
