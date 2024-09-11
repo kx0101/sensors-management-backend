@@ -1,10 +1,10 @@
-import { Socket } from 'node:net';
-import { logger } from './logger';
-import { Parser } from 'binary-parser';
-import { createEntry } from '../services/gatewayService';
+import { Socket } from "node:net";
+import { logger } from "./logger";
+import { Parser } from "binary-parser";
+import { createEntry } from "../services/gatewayService";
 
-const GATEWAY_PORT = parseInt(process.env.GATEWAY_PORT ?? '10001');
-const GATEWAY_URI = process.env.GATEWAY_URI ?? '192.168.1.7';
+const GATEWAY_PORT = parseInt(process.env.GATEWAY_PORT ?? "10001");
+const GATEWAY_URI = process.env.GATEWAY_URI ?? "192.168.1.7";
 const MAX_RETRIES = 10;
 const RETRY_INTERVAL_MS = 5000;
 
@@ -16,26 +16,28 @@ class GatewayClient {
         this.tcpClient = new Socket();
         this.retries = 0;
 
-        this.tcpClient.on('error', this.handleError);
-        this.tcpClient.on('timeout', this.handleTimeout);
-        this.tcpClient.once('close', this.handleClose);
+        this.tcpClient.on("error", this.handleError);
+        this.tcpClient.on("timeout", this.handleTimeout);
+        this.tcpClient.once("close", this.handleClose);
     }
 
     connect() {
-        logger.info('Attempting to connect to gateway');
+        logger.info("Attempting to connect to gateway");
         this.attemptConnection();
     }
 
     private attemptConnection = () => {
         this.tcpClient.connect(GATEWAY_PORT, GATEWAY_URI);
 
-        this.tcpClient.once('connect', () => {
-            logger.info(`Connected to gateway on port: ${GATEWAY_URI}:${GATEWAY_PORT}`);
+        this.tcpClient.once("connect", () => {
+            logger.info(
+                `Connected to gateway on port: ${GATEWAY_URI}:${GATEWAY_PORT}`,
+            );
             this.retries = 0;
 
-            this.tcpClient.on('data', this.handleData);
-            this.tcpClient.once('data', () => {
-                logger.info('Gateway started receiving data');
+            this.tcpClient.on("data", this.handleData);
+            this.tcpClient.once("data", () => {
+                logger.info("Gateway started receiving data");
             });
         });
     };
@@ -49,12 +51,12 @@ class GatewayClient {
     };
 
     private handleTimeout = () => {
-        logger.warn('Connection timed out. Destroying socket.');
+        logger.warn("Connection timed out. Destroying socket.");
         this.handleRetry();
     };
 
     private handleClose = () => {
-        logger.warn('Gateway connection closed.');
+        logger.warn("Gateway connection closed.");
         this.handleRetry();
     };
 
@@ -64,12 +66,16 @@ class GatewayClient {
         this.tcpClient = new Socket();
 
         if (this.retries >= MAX_RETRIES) {
-            logger.error('Max retries reached. Could not connect to the gateway.');
+            logger.error(
+                "Max retries reached. Could not connect to the gateway.",
+            );
             return;
         }
 
         this.retries++;
-        logger.info(`Retrying connection in ${RETRY_INTERVAL_MS / 1000} seconds... (Attempt ${this.retries}/${MAX_RETRIES})`);
+        logger.info(
+            `Retrying connection in ${RETRY_INTERVAL_MS / 1000} seconds... (Attempt ${this.retries}/${MAX_RETRIES})`,
+        );
         setTimeout(this.attemptConnection, RETRY_INTERVAL_MS);
     };
 }
@@ -78,16 +84,22 @@ export const gatewayClient = new GatewayClient();
 export const sensorCache = new Map<string, number>();
 
 export const binaryParser = new Parser()
-    .endianness('big')
+    .endianness("big")
     .skip(6)
-    .array('address', {
-        type: 'uint8',
+    .array("address", {
+        type: "uint8",
         length: 8,
-        formatter: (arr: any) => arr.map((num: { toString: (arg0: number) => string; }) => num.toString(16).padStart(2, '0')).join('')
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        formatter: (arr: Array<number>): string =>
+            arr
+                .map((num: { toString: (arg0: number) => string }) =>
+                    num.toString(16).padStart(2, "0"),
+                )
+                .join(""),
     })
-    .uint8('type')
-    .uint8('order')
+    .uint8("type")
+    .uint8("order")
     .skip(1)
-    .uint8('id')
-    .floatbe('value');
-
+    .uint8("id")
+    .floatbe("value");

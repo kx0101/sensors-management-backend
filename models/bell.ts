@@ -1,12 +1,12 @@
-import { model, Schema, type InferSchemaType } from 'mongoose'
+import { model, Schema, type InferSchemaType } from "mongoose";
 
 const bellSchema = new Schema({
-    status: {
-        type: Boolean,
-        unique: false,
-        required: true
-    }
-})
+	status: {
+		type: Boolean,
+		unique: false,
+		required: true,
+	},
+});
 
-export type Bell = InferSchemaType<typeof bellSchema>
-export const Bell = model('Bell', bellSchema)
+export type Bell = InferSchemaType<typeof bellSchema>;
+export const Bell = model("Bell", bellSchema);
