@@ -34,10 +34,5 @@ const alarmSchema = new Schema(
 	},
 );
 
-<<<<<<< HEAD
 export type Alarm = InferSchemaType<typeof alarmSchema>
 export const AlarmRepo = model('Alarm', alarmSchema)
-=======
-export type Alarm = InferSchemaType<typeof alarmSchema>;
-export const Alarm = model("Alarm", alarmSchema);
->>>>>>> c9572c17e8b9e6eb730f997677a40bd7347b8ea5
