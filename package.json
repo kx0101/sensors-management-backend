@@ -2,12 +2,13 @@
 	"name": "kex_sensors_server",
 	"module": "index.ts",
 	"scripts": {
-		"format": "prettier --write .",
+		"format:fix": "prettier --write .",
+		"format:check": "prettier --check .",
 		"lint:fix": "eslint . --fix",
 		"lint:check": "eslint .",
 		"type:check": "tsc --noEmit",
-		"format:check": "prettier --check .",
-		"prepare": "husky"
+		"prepare": "husky",
+        "test": "bun test"
 	},
 	"type": "module",
 	"devDependencies": {

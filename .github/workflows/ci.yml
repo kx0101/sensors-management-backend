@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Bun
+        shell: bash
+        run: |
+          curl -fsSL https://bun.sh/install | bash
+          export BUN_INSTALL="$HOME/.bun"
+          export PATH="$BUN_INSTALL/bin:$PATH"
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run Prettier
+        run: bun run format:check
+
+      - name: Run ESLint
+        run: bun run lint:check
+
+      - name: Run TypeScript
+        run: bun run type:check
+
+      # - name: Run Tests
+      #   run: bun run test
