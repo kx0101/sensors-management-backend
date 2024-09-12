@@ -1,6 +1,4 @@
-import { gql } from "apollo-server-express";
-
-export const bellType = gql`
+export const bellType = `#graphql
 	type Query {
 		bell: Bell
 	}

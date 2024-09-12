@@ -1,6 +1,4 @@
-import { gql } from "apollo-server-express";
-
-export const userType = gql`
+export const userType = `#graphql
 	type User {
 		id: String
 		username: String

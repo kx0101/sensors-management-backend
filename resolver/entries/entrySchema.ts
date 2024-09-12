@@ -1,6 +1,4 @@
-import { gql } from "apollo-server-express";
-
-export const entryType = gql`
+export const entryType = `#graphql
 	type Query {
 		entries(sensor: EntryID!): [Entry]
 	}

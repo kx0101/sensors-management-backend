@@ -1,6 +1,4 @@
-import { gql } from "apollo-server-express";
-
-export const sensorType = gql`
+export const sensorType = `#graphql
 	type Query {
 		sensors: [Sensor]
 		sensor(location: String!): Sensor
