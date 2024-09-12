@@ -23,7 +23,8 @@ export const alarmType = gql`
 	}
 
 	input SensorInput {
-		id: ID!
+		address: String!
+		id: Int!
 	}
 
 	input AlarmCreate {

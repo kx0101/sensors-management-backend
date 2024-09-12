@@ -10,7 +10,8 @@ export interface AlarmUpdate {
 }
 
 export interface SensorInput {
-	id: string;
+	address: string;
+	id: number;
 }
 
 export interface SensorID {

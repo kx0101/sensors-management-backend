@@ -16,7 +16,10 @@ export const alarmResolvers = {
 			return result;
 		},
 		alarm: async (_: unknown, { sensor }: { sensor: SensorInput }) => {
-			return await AlarmRepo.find({ sensor: sensor.id });
+			return await AlarmRepo.find({
+				sensor: sensor.id,
+				address: sensor.address,
+			});
 		},
 	},
 	Mutation: {
