@@ -1,6 +1,4 @@
-import { gql } from "apollo-server-express";
-
-export const alarmType = gql`
+export const alarmType = `#graphql
 	type Query {
 		alarms: [Alarm]
 		alarm(sensor: SensorInput!): [Alarm]
