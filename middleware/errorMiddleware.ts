@@ -8,7 +8,7 @@ export const notFound = async (
 ) => {
 	const error = new Error(`Not found - ${req.originalUrl}`);
 
-	res.send(StatusCodes.NOT_FOUND);
+	res.sendStatus(StatusCodes.NOT_FOUND);
 
 	next(error);
 };
