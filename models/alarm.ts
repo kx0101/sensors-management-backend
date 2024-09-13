@@ -12,11 +12,6 @@ const alarmSchema = new Schema(
 			unique: false,
 			required: true,
 		},
-		value: {
-			type: Number,
-			unique: false,
-			required: true,
-		},
 		reason: {
 			type: String,
 			unique: false,
