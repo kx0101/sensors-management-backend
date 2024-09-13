@@ -1,7 +1,9 @@
 import { logger } from "../../config/logger.ts";
 import { EntryRepo, type Entry } from "../../models/entry";
 import type { EntryCreate, EntryID } from "./entries.d.ts";
+import { PubSub } from "graphql-subscriptions";
 
+const pubsub = new PubSub();
 export const entriesResolvers = {
 	Query: {
 		entries: async (_: unknown, { sensor }: { sensor: Entry }) => {
@@ -30,7 +32,7 @@ export const entriesResolvers = {
 			}).catch((err: Error) => {
 				logger.error(err.message);
 			});
-
+			pubsub.publish("ENTRY_CREATED", { entryCreated: entry });
 			return entry;
 		},
 		deleteEntries: async (
@@ -48,6 +50,11 @@ export const entriesResolvers = {
 				.deleteMany();
 
 			return `Deleted all entries older than ${entryInput.period} days`;
+		},
+	},
+	Subscription: {
+		entryCreated: {
+			subscribe: () => pubsub.asyncIterator(["ENTRY_CREATED"]),
 		},
 	},
 };

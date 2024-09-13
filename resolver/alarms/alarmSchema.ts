@@ -39,4 +39,8 @@ export const alarmType = `#graphql
 	input SensorID {
 		sensor: ID!
 	}
+
+	type Subscription {
+ 		 alarmCreated: Alarm
+	}
 `;

@@ -1,3 +1,4 @@
+import { PubSub } from "graphql-subscriptions";
 import { logger } from "../../config/logger.ts";
 import { AlarmRepo } from "../../models/alarm.ts";
 import type {
@@ -7,6 +8,7 @@ import type {
 	SensorInput,
 } from "./alarms.d.ts";
 
+const pubsub = new PubSub();
 export const alarmResolvers = {
 	Query: {
 		alarms: async () => {
@@ -34,6 +36,7 @@ export const alarmResolvers = {
 			}).catch((err: Error) => {
 				logger.error(err.message);
 			});
+			pubsub.publish("ALARM_CREATED", { alarmCreated: alarm });
 			return alarm;
 		},
 		updateAlarm: async (
@@ -55,6 +58,11 @@ export const alarmResolvers = {
 				sensor: sensor.sensor,
 			});
 			return `${deleteAlarms.deletedCount} alarms deleted`;
+		},
+	},
+	Subscription: {
+		alarmCreated: {
+			subscribe: () => pubsub.asyncIterator(["ALARM_CREATED"]),
 		},
 	},
 };

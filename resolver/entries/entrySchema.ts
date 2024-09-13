@@ -25,4 +25,8 @@ export const entryType = `#graphql
 		sensor: Int!
 		value: Int!
 	}
+
+	type Subscription {
+ 		 entryCreated: Entry
+	}
 `;
