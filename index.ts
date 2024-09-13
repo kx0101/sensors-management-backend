@@ -61,6 +61,8 @@ apolloServer.start().then(async () => {
 	app.use(express.urlencoded({ extended: true }));
 
 	app.use("/v1/users", userRoutes);
+	//Temporary fix for favicon.ico on playground
+	app.use("/favicon.ico", (req, res) => res.status(204));
 
 	app.use(notFound);
 	app.use(errorHandler);
