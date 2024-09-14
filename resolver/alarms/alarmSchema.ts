@@ -16,8 +16,8 @@ export const alarmType = `#graphql
 		sensor: Int!
 		reason: String
 		aknowledged: Boolean
-		createdAt: String
-		updatedAt: String
+		createdAt: DateTime
+		updatedAt: DateTime
 	}
 
 	input SensorInput {

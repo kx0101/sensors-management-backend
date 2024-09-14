@@ -11,9 +11,9 @@ export const entryType = `#graphql
 		address: String!
 		sensor: Int!
 		value: Float!
-		expireAt: String
-		createdAt: Float
-		updatedAt: Float
+		expireAt: DateTime
+		createdAt: DateTime
+		updatedAt: DateTime
 	}
 	input EntryID {
 		address: String!
@@ -23,7 +23,7 @@ export const entryType = `#graphql
 	input EntryCreate {
 		address: String!
 		sensor: Int!
-		value: Int!
+		value: Float!
 	}
 
 	type Subscription {
