@@ -9,6 +9,7 @@ import { logger } from "./logger";
  */
 export class Alarmbell extends SerialPort {
 	public status: boolean = false;
+	public disabled: boolean = false;
 
 	constructor() {
 		super(
