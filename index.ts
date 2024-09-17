@@ -13,91 +13,91 @@ import { WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import cors from "cors";
+import { Alarmbell } from "./config/alarmbell";
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 const app = express();
 const httpServer = createServer(app);
 const wsServer = new WebSocketServer({
-	server: httpServer,
-	path: "/subscriptions",
+    server: httpServer,
+    path: "/subscriptions",
 });
 const serverCleanup = useServer({ schema }, wsServer);
 
 const apolloServer = new ApolloServer({
-	schema,
-	introspection: true,
-	plugins: [
-		// Proper shutdown for the HTTP server.
-		ApolloServerPluginDrainHttpServer({ httpServer }),
+    schema,
+    introspection: true,
+    plugins: [
+        // Proper shutdown for the HTTP server.
+        ApolloServerPluginDrainHttpServer({ httpServer }),
 
-		// Proper shutdown for the WebSocket server.
-		{
-			async serverWillStart() {
-				return {
-					async drainServer() {
-						await serverCleanup.dispose();
-					},
-				};
-			},
-		},
-	],
+        // Proper shutdown for the WebSocket server.
+        {
+            async serverWillStart() {
+                return {
+                    async drainServer() {
+                        await serverCleanup.dispose();
+                    },
+                };
+            },
+        },
+    ],
 });
 
 const PORT = process.env.PORT || 3000;
 
-apolloServer.start().then(async () => {
-	app.use(
-		"/graphql",
-		express.json(),
-		cors<cors.CorsRequest>(),
-		expressMiddleware(apolloServer),
-	);
+apolloServer.start().then(() => {
+    app.use(
+        "/graphql",
+        express.json(),
+        cors<cors.CorsRequest>(),
+        expressMiddleware(apolloServer),
+    );
 
-	logger.info("Apollo Server is running on /graphql");
+    logger.info("Apollo Server is running on /graphql");
 
-	connectDB();
-	gatewayClient.connect();
+    connectDB();
+    gatewayClient.connect();
 
-	app.use(express.urlencoded({ extended: true }));
+    new Alarmbell();
 
-	app.use("/v1/users", userRoutes);
-	//Temporary fix for favicon.ico on playground
-	app.use("/favicon.ico", (req, res) => res.status(204));
+    app.use(express.urlencoded({ extended: true }));
 
-	app.use(notFound);
-	app.use(errorHandler);
+    app.use("/v1/users", userRoutes);
+    //Temporary fix for favicon.ico on playground
+    app.use("/favicon.ico", (_req, res) => res.status(204));
 
-	// app.listen(PORT, () => {
-	// 	logger.info(`Express Server is running on port ${PORT}`);
-	// });
+    app.use(notFound);
+    app.use(errorHandler);
 
-	httpServer.listen(PORT, () => {
-		logger.info(`Http Server is running on port ${PORT}`);
-	});
-	wsServer.once("listening", () => {
-		logger.info(`WebSocket: Server is running `);
-	});
+    httpServer.listen(PORT, () => {
+        logger.info(`http Server is running on port ${PORT}`);
+    });
 
-	wsServer.on("connection", (socket) => {
-		logger.info(`WebSocket: Client Connecting`);
+    wsServer.once("listening", () => {
+        logger.info(`WebSocket: Server is running on /subscriptions`);
+    });
 
-		switch (socket.readyState) {
-			case 0:
-				logger.info(`WebSocket: Client Connecting`);
-				break;
-			case 1:
-				logger.info(`WebSocket: Client Open`);
-				break;
-			case 2:
-				logger.warn(`WebSocket: Client Closing`);
-				break;
-			case 3:
-				logger.warn(`WebSocket: Client Closed`);
-				break;
-		}
-	});
+    wsServer.on("connection", (socket) => {
+        logger.info(`WebSocket: Client Connecting`);
 
-	wsServer.on("error", (error) => {
-		logger.error(`WebSocket: ${error.message}`);
-	});
+        switch (socket.readyState) {
+            case 0:
+                logger.info(`WebSocket: Client Connecting`);
+                break;
+            case 1:
+                logger.info(`WebSocket: Client Open`);
+                break;
+            case 2:
+                logger.warn(`WebSocket: Client Closing`);
+                break;
+            case 3:
+                logger.warn(`WebSocket: Client Closed`);
+                break;
+        }
+    });
+
+    wsServer.on("error", (error) => {
+        logger.error(`WebSocket: ${error.message}`);
+    });
 });
