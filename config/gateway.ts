@@ -18,7 +18,7 @@ class GatewayClient {
 
 		this.tcpClient.on("error", this.handleError);
 		this.tcpClient.on("timeout", this.handleTimeout);
-		this.tcpClient.once("close", this.handleClose);
+		this.tcpClient.on("close", this.handleClose);
 	}
 
 	connect() {
@@ -27,6 +27,7 @@ class GatewayClient {
 	}
 
 	private attemptConnection = () => {
+		logger.info("Attempting to reconnect to gateway");
 		this.tcpClient.connect(GATEWAY_PORT, GATEWAY_URI);
 
 		this.tcpClient.once("connect", () => {
@@ -48,6 +49,7 @@ class GatewayClient {
 
 	private handleError = (error: Error) => {
 		logger.error(`Gateway Connection Error: ${error.message}`);
+		this.handleRetry();
 	};
 
 	private handleTimeout = () => {
@@ -65,6 +67,10 @@ class GatewayClient {
 		this.tcpClient.destroy();
 		this.tcpClient = new Socket();
 
+		this.tcpClient.on("error", this.handleError);
+		this.tcpClient.on("timeout", this.handleTimeout);
+		this.tcpClient.on("close", this.handleClose);
+
 		if (this.retries >= MAX_RETRIES) {
 			logger.error(
 				"Max retries reached. Could not connect to the gateway.",
@@ -76,7 +82,8 @@ class GatewayClient {
 		logger.info(
 			`Retrying connection in ${RETRY_INTERVAL_MS / 1000} seconds... (Attempt ${this.retries}/${MAX_RETRIES})`,
 		);
-		setTimeout(this.attemptConnection, RETRY_INTERVAL_MS);
+
+		setTimeout(() => this.attemptConnection(), RETRY_INTERVAL_MS);
 	};
 }
 
