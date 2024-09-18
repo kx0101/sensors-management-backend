@@ -13,7 +13,10 @@ import { WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import cors from "cors";
+import { Alarmbell } from "./config/alarmbell";
+import dotnev from "dotenv";
 
+dotnev.config();
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 const app = express();
 const httpServer = createServer(app);
@@ -45,7 +48,7 @@ const apolloServer = new ApolloServer({
 
 const PORT = process.env.PORT || 3000;
 
-apolloServer.start().then(async () => {
+apolloServer.start().then(() => {
 	app.use(
 		"/graphql",
 		express.json(),
@@ -58,24 +61,23 @@ apolloServer.start().then(async () => {
 	connectDB();
 	gatewayClient.connect();
 
+	new Alarmbell();
+
 	app.use(express.urlencoded({ extended: true }));
 
 	app.use("/v1/users", userRoutes);
 	//Temporary fix for favicon.ico on playground
-	app.use("/favicon.ico", (req, res) => res.status(204));
+	app.use("/favicon.ico", (_req, res) => res.status(204));
 
 	app.use(notFound);
 	app.use(errorHandler);
 
-	// app.listen(PORT, () => {
-	// 	logger.info(`Express Server is running on port ${PORT}`);
-	// });
-
 	httpServer.listen(PORT, () => {
-		logger.info(`Http Server is running on port ${PORT}`);
+		logger.info(`http Server is running on port ${PORT}`);
 	});
+
 	wsServer.once("listening", () => {
-		logger.info(`WebSocket: Server is running `);
+		logger.info(`WebSocket: Server is running on /subscriptions`);
 	});
 
 	wsServer.on("connection", (socket) => {

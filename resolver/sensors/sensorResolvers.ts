@@ -1,6 +1,6 @@
-import { logger } from "../../config/logger.ts";
-import { SensorRepo } from "../../models/sensor.ts";
-import type { SensorCreate, SensorUpdate } from "./sensors.d.ts";
+import { logger } from "../../config/logger";
+import { SensorRepo } from "../../models/sensor";
+import type { SensorCreate, SensorUpdate } from "./sensors.d";
 
 export const sensorsResolvers = {
 	Query: {

@@ -18,7 +18,7 @@ class GatewayClient {
 
 		this.tcpClient.on("error", this.handleError);
 		this.tcpClient.on("timeout", this.handleTimeout);
-		this.tcpClient.once("close", this.handleClose);
+		this.tcpClient.on("close", this.handleClose);
 	}
 
 	connect() {
@@ -48,6 +48,7 @@ class GatewayClient {
 
 	private handleError = (error: Error) => {
 		logger.error(`Gateway Connection Error: ${error.message}`);
+		this.handleRetry();
 	};
 
 	private handleTimeout = () => {
@@ -65,6 +66,10 @@ class GatewayClient {
 		this.tcpClient.destroy();
 		this.tcpClient = new Socket();
 
+		this.tcpClient.on("error", this.handleError);
+		this.tcpClient.on("timeout", this.handleTimeout);
+		this.tcpClient.on("close", this.handleClose);
+
 		if (this.retries >= MAX_RETRIES) {
 			logger.error(
 				"Max retries reached. Could not connect to the gateway.",
@@ -76,7 +81,8 @@ class GatewayClient {
 		logger.info(
 			`Retrying connection in ${RETRY_INTERVAL_MS / 1000} seconds... (Attempt ${this.retries}/${MAX_RETRIES})`,
 		);
-		setTimeout(this.attemptConnection, RETRY_INTERVAL_MS);
+
+		setTimeout(() => this.attemptConnection(), RETRY_INTERVAL_MS);
 	};
 }
 
@@ -89,8 +95,6 @@ export const binaryParser = new Parser()
 	.array("address", {
 		type: "uint8",
 		length: 8,
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
 		formatter: (arr: Array<number>): string =>
 			arr
 				.map((num: { toString: (arg0: number) => string }) =>

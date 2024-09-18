@@ -1,6 +1,6 @@
-import { logger } from "../../config/logger.ts";
+import { logger } from "../../config/logger";
 import { EntryRepo, type Entry } from "../../models/entry";
-import type { EntryCreate, EntryID } from "./entries.d.ts";
+import type { EntryCreate, EntryID } from "./entries.d";
 import { PubSub } from "graphql-subscriptions";
 
 const pubsub = new PubSub();

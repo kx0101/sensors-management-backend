@@ -3,7 +3,7 @@ import { logger } from "../config/logger";
 
 export const connectDB = async () => {
 	try {
-		const conn = await mongoose.connect(process.env.MONGODB_URL ?? "", {
+		const conn = await mongoose.connect(process.env.MONGODB_URL, {
 			replicaSet: "rs0",
 			dbName: "sensors",
 			auth: {
