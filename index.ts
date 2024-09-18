@@ -12,9 +12,11 @@ import { createServer } from "http";
 import { WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import cors from "cors";
+// import cors from "cors";
 import { Alarmbell } from "./config/alarmbell";
+import dotnev from 'dotenv'
 
+dotnev.config()
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 const app = express();
 const httpServer = createServer(app);
@@ -50,7 +52,7 @@ apolloServer.start().then(() => {
 	app.use(
 		"/graphql",
 		express.json(),
-		cors<cors.CorsRequest>(),
+		// cors<cors.CorsRequest>(),
 		expressMiddleware(apolloServer),
 	);
 
