@@ -27,7 +27,6 @@ class GatewayClient {
 	}
 
 	private attemptConnection = () => {
-		logger.info("Attempting to reconnect to gateway");
 		this.tcpClient.connect(GATEWAY_PORT, GATEWAY_URI);
 
 		this.tcpClient.once("connect", () => {
