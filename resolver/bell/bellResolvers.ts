@@ -1,6 +1,6 @@
-import { logger } from "../../config/logger.ts";
-import { BellRepo } from "../../models/bell.ts";
-import type { BellUpdate } from "./bell.d.ts";
+import { logger } from "../../config/logger";
+import { BellRepo } from "../../models/bell";
+import type { BellUpdate } from "./bell.d";
 
 export const bellResolvers = {
 	Query: {

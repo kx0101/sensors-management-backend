@@ -1,12 +1,12 @@
 import { PubSub } from "graphql-subscriptions";
-import { logger } from "../../config/logger.ts";
-import { AlarmRepo } from "../../models/alarm.ts";
+import { logger } from "../../config/logger";
+import { AlarmRepo } from "../../models/alarm";
 import type {
 	AlarmCreate,
 	AlarmUpdate,
 	SensorID,
 	SensorInput,
-} from "./alarms.d.ts";
+} from "./alarms.d";
 
 const pubsub = new PubSub();
 export const alarmResolvers = {
