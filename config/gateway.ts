@@ -95,8 +95,6 @@ export const binaryParser = new Parser()
 	.array("address", {
 		type: "uint8",
 		length: 8,
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
 		formatter: (arr: Array<number>): string =>
 			arr
 				.map((num: { toString: (arg0: number) => string }) =>

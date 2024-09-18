@@ -14,9 +14,9 @@ import { useServer } from "graphql-ws/lib/use/ws";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 // import cors from "cors";
 import { Alarmbell } from "./config/alarmbell";
-import dotnev from 'dotenv'
+import dotnev from "dotenv";
 
-dotnev.config()
+dotnev.config();
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 const app = express();
 const httpServer = createServer(app);

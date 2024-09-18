@@ -26,6 +26,6 @@
 		"noPropertyAccessFromIndexSignature": false,
 		"allowSyntheticDefaultImports": true
 	},
-	"exclude": ["node_modules",".github", ".husky"],
+	"exclude": ["node_modules", ".github", ".husky"],
 	"include": ["./**/*.ts"]
 }
