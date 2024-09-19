@@ -61,7 +61,11 @@ apolloServer.start().then(() => {
 	connectDB();
 	gatewayClient.connect();
 
-	new Alarmbell();
+	const alarmBell = new Alarmbell();
+	process.on("SIGINT", () => {
+		logger.warn("Gracefully closing serial connection...");
+		alarmBell.close();
+	});
 
 	app.use(express.urlencoded({ extended: true }));
 
