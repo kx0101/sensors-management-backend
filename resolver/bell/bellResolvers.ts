@@ -9,7 +9,7 @@ export const bellResolvers = {
 		},
 	},
 	Mutation: {
-		bellUpdate: async (
+		updateBell: async (
 			_: unknown,
 			{ bellInput }: { bellInput: BellUpdate },
 		) => {

@@ -4,7 +4,7 @@ export const bellType = `#graphql
 	}
 
 	type Mutation {
-		bellUpdate(bellInput: BellUpdate!): Bell
+		updateBell(bellInput: BellUpdate!): Bell
 	}
 
 	type Bell {
