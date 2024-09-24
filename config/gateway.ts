@@ -5,7 +5,7 @@ import { createEntry } from "../services/gatewayService";
 
 const GATEWAY_PORT = parseInt(process.env.GATEWAY_PORT ?? "10001");
 const GATEWAY_URI = process.env.GATEWAY_URI ?? "192.168.1.7";
-const MAX_RETRIES = 10;
+const MAX_RETRIES = 1;
 const RETRY_INTERVAL_MS = 5000;
 
 class GatewayClient {

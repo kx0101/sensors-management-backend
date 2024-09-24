@@ -3,7 +3,9 @@ import { StatusCodes } from "http-status-codes";
 import { loginUser, getAdminPage } from "../services/usersService";
 
 export const login = async (req: Request, res: Response) => {
+	console.log(req);
 	const { username, password } = req.body;
+	console.log(username, password);
 
 	try {
 		const {
@@ -34,7 +36,7 @@ export const login = async (req: Request, res: Response) => {
 
 		return res
 			.status(StatusCodes.BAD_REQUEST)
-			.json({ message: "An error occurred" });
+			.json({ message: error.message });
 	}
 };
 

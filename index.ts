@@ -56,6 +56,20 @@ apolloServer.start().then(() => {
 		expressMiddleware(apolloServer),
 	);
 
+	app.use(express.urlencoded({ extended: true }));
+	app.use(express.json());
+	app.use(cors());
+	app.get("/test", (req, res) => {
+		res.status(200).json({ message: "Test route working!" });
+	});
+
+	app.use("/v1/users", userRoutes);
+	//Temporary fix for favicon.ico on playground
+	app.use("/favicon.ico", (_req, res) => res.status(204));
+
+	app.use(notFound);
+	app.use(errorHandler);
+
 	logger.info("Apollo Server is running on /graphql");
 
 	connectDB();
@@ -66,15 +80,6 @@ apolloServer.start().then(() => {
 		logger.warn("Gracefully closing serial connection...");
 		alarmBell.close();
 	});
-
-	app.use(express.urlencoded({ extended: true }));
-
-	app.use("/v1/users", userRoutes);
-	//Temporary fix for favicon.ico on playground
-	app.use("/favicon.ico", (_req, res) => res.status(204));
-
-	app.use(notFound);
-	app.use(errorHandler);
 
 	httpServer.listen(PORT, () => {
 		logger.info(`http Server is running on port ${PORT}`);
