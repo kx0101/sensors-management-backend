@@ -2,12 +2,14 @@ export const sensorType = `#graphql
 	type Query {
 		sensors: [Sensor]
 		sensor(location: String!): Sensor
+        getSensorByAddressAndId(address: String!, sensor_id: Int!): Sensor
 	}
 
 	type Mutation {
 		createSensor(sensorInput: SensorCreate!): Sensor
 		updateSensor(sensorInput: SensorUpdate!): Sensor
 		deleteSensor(_id: ID!): Sensor
+        updateStatusSensor(_id: ID!, status: Boolean!): Sensor
 	}
 
 	type Sensor {
