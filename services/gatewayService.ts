@@ -53,12 +53,7 @@ export const createEntry = async (data: Buffer) => {
 	});
 
 	console.log("fetching sensor...");
-	const {
-		status: sensorStatus,
-		down_limit,
-		up_limit,
-		type: sensorType,
-	} = currSensor;
+	const { status: sensorStatus, down_limit, up_limit } = currSensor;
 
 	if (!sensorStatus) {
 		return;
