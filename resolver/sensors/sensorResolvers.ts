@@ -14,6 +14,22 @@ export const sensorsResolvers = {
 				},
 			);
 		},
+		getSensorByAddressAndId: async (
+			_: unknown,
+			{ address, sensor_id }: { address: string; sensor_id: number },
+		) => {
+			try {
+				return await SensorRepo.findOne({
+					address: address,
+					sensor_id: sensor_id,
+				});
+			} catch (err) {
+				logger.error(err.message);
+				throw new Error(
+					`Failed to fetch sensor with address ${address} and sensor_id ${sensor_id}`,
+				);
+			}
+		},
 	},
 	Mutation: {
 		createSensor: async (
@@ -40,6 +56,22 @@ export const sensorsResolvers = {
 				logger.error(err.message);
 			});
 			return updateSensor;
+		},
+		updateStatusSensor: async (
+			_: unknown,
+			{ _id, status }: { _id: string; status: boolean },
+		) => {
+			try {
+				const updatedSensor = await SensorRepo.findOneAndUpdate(
+					{ _id },
+					{ status },
+					{ new: true },
+				);
+				return updatedSensor;
+			} catch (err) {
+				logger.error(err.message);
+				throw new Error("Failed to update sensor status");
+			}
 		},
 		deleteSensor: async (_: unknown, { _id }: { _id: string }) => {
 			const deleteSensor = await SensorRepo.findOneAndDelete({

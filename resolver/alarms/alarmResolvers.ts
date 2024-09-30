@@ -1,6 +1,6 @@
 import { PubSub } from "graphql-subscriptions";
 import { logger } from "../../config/logger";
-import { AlarmRepo } from "../../models/alarm";
+import { Alarm, AlarmRepo } from "../../models/alarm";
 import type {
 	AlarmCreate,
 	AlarmUpdate,
@@ -21,6 +21,15 @@ export const alarmResolvers = {
 			return await AlarmRepo.find({
 				sensor: sensor.id,
 				address: sensor.address,
+			});
+		},
+		getAlarmByAddressAndId: async (
+			_: unknown,
+			{ address, sensor }: { address: string; sensor: number },
+		) => {
+			return await AlarmRepo.findOne({
+				sensor,
+				address,
 			});
 		},
 	},

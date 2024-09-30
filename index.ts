@@ -72,8 +72,7 @@ apolloServer.start().then(() => {
 
 	logger.info("Apollo Server is running on /graphql");
 
-	connectDB();
-	gatewayClient.connect();
+	connectDB().then(() => gatewayClient.connect());
 
 	const alarmBell = new Alarmbell();
 	process.on("SIGINT", () => {

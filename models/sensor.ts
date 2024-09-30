@@ -1,6 +1,10 @@
 import { model, Schema, type InferSchemaType } from "mongoose";
 
 const sensorSchema = new Schema({
+	_id: {
+		type: Schema.Types.ObjectId,
+		auto: true,
+	},
 	name: {
 		type: String,
 		unique: false,
