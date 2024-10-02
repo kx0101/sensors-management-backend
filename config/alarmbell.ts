@@ -60,7 +60,7 @@ export class Alarmbell extends SerialPort {
 					this.status = true;
 				}
 
-				logger.log("Alarm is ", this.status ? "closed" : "open");
+				logger.info("Alarm is " + (this.status ? "closed" : "open"));
 			}
 		});
 	}

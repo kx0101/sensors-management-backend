@@ -1,4 +1,5 @@
 import { binaryParser, sensorCache } from "../config/gateway";
+import { logger } from "../config/logger";
 import { Sensor } from "../models/sensor";
 import { alarmResolvers } from "../resolver/alarms/alarmResolvers";
 import { entriesResolvers } from "../resolver/entries/entryResolvers";
@@ -28,6 +29,7 @@ export const createEntry = async (data: Buffer) => {
 
 	if (shouldSkip(prevSensor, parsedData)) {
 		console.log("skipping");
+		logger.info("skipping");
 		return;
 	}
 
@@ -44,6 +46,7 @@ export const createEntry = async (data: Buffer) => {
 	sensorCache.set(sensorKey, currentDate);
 
 	console.log("creating entry...");
+	logger.info("creating entry...");
 	await entriesResolvers.Mutation.createEntry(null, {
 		entryInput: {
 			address: parsedData.address,
@@ -53,6 +56,7 @@ export const createEntry = async (data: Buffer) => {
 	});
 
 	console.log("fetching sensor...");
+	logger.info("fetching sensor...");
 	const { status: sensorStatus, down_limit, up_limit } = currSensor;
 
 	if (!sensorStatus) {
@@ -60,13 +64,15 @@ export const createEntry = async (data: Buffer) => {
 	}
 
 	console.log("fetching alarm...");
+	logger.info("fetching alarm...");
 	const alarm = await alarmResolvers.Query.getAlarmByAddressAndId(null, {
 		address: parsedData.address,
 		sensor: parsedData.id,
 	});
 
-	if (alarm && alarm.aknowledged) {
+	if (alarm && !alarm.aknowledged && !sensorStatus) {
 		console.log("alarm: ", alarm);
+		logger.info(`alarm: ${alarm}`);
 		return;
 	}
 
@@ -74,6 +80,7 @@ export const createEntry = async (data: Buffer) => {
 		const reason = getAlarmReason(parsedData.value, currSensor);
 
 		console.log("creating alarm...");
+		logger.info("creating alarm...");
 		await alarmResolvers.Mutation.createAlarm(null, {
 			alarmInput: {
 				address: parsedData.address,
@@ -83,6 +90,7 @@ export const createEntry = async (data: Buffer) => {
 		});
 
 		console.log("updating sensor's status to false...");
+		logger.info("updating sensor's status to false...");
 		await sensorsResolvers.Mutation.updateStatusSensor(null, {
 			_id: currSensor._id.toString(),
 			status: false,

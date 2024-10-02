@@ -3,6 +3,9 @@ export const sensorType = `#graphql
 		sensors: [Sensor]
 		sensor(location: String!): Sensor
         getSensorByAddressAndId(address: String!, sensor_id: Int!): Sensor
+        getSensorsByBuilding(building: String!): [Sensor]
+        getSensorUniqueBuildings: [String]
+        getSensorsByBatch(inputs: [SensorBatchInput!]!): [Sensor!]!
 	}
 
 	type Mutation {
@@ -55,4 +58,9 @@ export const sensorType = `#graphql
 		up_limit: Float
 		down_limit: Float
 	}
+
+    input SensorBatchInput {
+        address: String!
+        sensor_id: Int!
+    }
 `;

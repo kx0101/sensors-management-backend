@@ -12,6 +12,11 @@ interface SensorBase {
 	down_limit: number;
 }
 
+type SensorBatchInput = {
+	address: string;
+	sensor_id: number;
+};
+
 export interface SensorCreate extends Omit<SensorBase, "_id"> {}
 
 export interface SensorUpdate extends SensorBase {

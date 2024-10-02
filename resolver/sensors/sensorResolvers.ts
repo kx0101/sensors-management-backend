@@ -1,6 +1,6 @@
 import { logger } from "../../config/logger";
 import { SensorRepo } from "../../models/sensor";
-import type { SensorCreate, SensorUpdate } from "./sensors.d";
+import type { SensorBatchInput, SensorCreate, SensorUpdate } from "./sensors.d";
 
 export const sensorsResolvers = {
 	Query: {
@@ -29,6 +29,49 @@ export const sensorsResolvers = {
 					`Failed to fetch sensor with address ${address} and sensor_id ${sensor_id}`,
 				);
 			}
+		},
+		getSensorUniqueBuildings: async (_: unknown) => {
+			try {
+				const sensors = await SensorRepo.find();
+
+				const uniqueBuildings = new Set();
+				for (let i = 0; i < sensors.length; i++) {
+					uniqueBuildings.add(sensors[i].building);
+				}
+
+				return Array.from(uniqueBuildings);
+			} catch (err) {
+				logger.error(err.message);
+				throw new Error(`Failed to fetch sensor with unique buildings`);
+			}
+		},
+		getSensorsByBuilding: async (
+			_: unknown,
+			{ building }: { building: string },
+		) => {
+			try {
+				return await SensorRepo.find({
+					building,
+				});
+			} catch (err) {
+				logger.error(err.message);
+				throw new Error(
+					`Failed to fetch sensor with building ${building}`,
+				);
+			}
+		},
+		getSensorsByBatch: async (
+			_: any,
+			{ inputs }: { inputs: Array<SensorBatchInput> },
+		) => {
+			const sensorPromises = inputs.map((input) =>
+				sensorsResolvers.Query.getSensorByAddressAndId(null, {
+					address: input.address,
+					sensor_id: input.sensor_id,
+				}),
+			);
+
+			return Promise.all(sensorPromises);
 		},
 	},
 	Mutation: {

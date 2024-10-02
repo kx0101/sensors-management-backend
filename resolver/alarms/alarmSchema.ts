@@ -3,6 +3,7 @@ export const alarmType = `#graphql
 		alarms: [Alarm]
 		alarm(sensor: SensorInput!): [Alarm]
         getAlarmByAddressAndId(address: String!, sensor: Int!): Alarm
+        getAlarmsByAknowledged(aknowledged: Boolean): [Alarm]
 	}
 
 	type Mutation {

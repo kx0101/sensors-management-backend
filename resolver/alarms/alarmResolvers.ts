@@ -32,6 +32,14 @@ export const alarmResolvers = {
 				address,
 			});
 		},
+		getAlarmsByAknowledged: async (
+			_: unknown,
+			{ aknowledged }: { aknowledged: boolean },
+		) => {
+			return await AlarmRepo.find({
+				aknowledged,
+			});
+		},
 	},
 	Mutation: {
 		createAlarm: async (
