@@ -8,4 +8,5 @@ export interface EntryCreate {
 	address: string;
 	sensor: number;
 	value: number;
+	sensor_id: string;
 }

@@ -28,5 +28,11 @@ export const entryType = `#graphql
 
 	type Subscription {
  		 entryCreated: Entry
+         timeoutCreated: timeoutData
 	}
+
+    type timeoutData {
+        sensor_id: String!
+        timeout: DateTime
+    }
 `;

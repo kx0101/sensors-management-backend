@@ -60,7 +60,12 @@ const sensorSchema = new Schema({
 		unique: false,
 		required: false,
 	},
+	timeout: {
+		type: Number,
+	},
 });
+
+sensorSchema.path("timeout").default(() => Date.now());
 
 export type Sensor = InferSchemaType<typeof sensorSchema>;
 export const SensorRepo = model("Sensor", sensorSchema);

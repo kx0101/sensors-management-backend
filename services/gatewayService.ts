@@ -35,10 +35,7 @@ export const createEntry = async (data: Buffer) => {
 
 	const currentDate = Date.now();
 	const lastAdded = sensorCache.get(sensorKey)!;
-	if (
-		currentDate - lastAdded <= 60000 &&
-		prevSensor.status === parsedData.status
-	) {
+	if (currentDate - lastAdded <= 60000) {
 		return;
 	}
 
@@ -52,6 +49,7 @@ export const createEntry = async (data: Buffer) => {
 			address: parsedData.address,
 			sensor: parsedData.id,
 			value: parsedData.value,
+			sensor_id: currSensor._id.toString(),
 		},
 	});
 
@@ -92,8 +90,8 @@ export const createEntry = async (data: Buffer) => {
 		console.log("updating sensor's status to false...");
 		logger.info("updating sensor's status to false...");
 		await sensorsResolvers.Mutation.updateStatusSensor(null, {
-			_id: currSensor._id.toString(),
-			status: false,
+		    _id: currSensor._id.toString(),
+		    status: false,
 		});
 	}
 };

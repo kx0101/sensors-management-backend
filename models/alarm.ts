@@ -21,7 +21,6 @@ const alarmSchema = new Schema(
 			type: Boolean,
 			unique: false,
 			required: false,
-			default: false,
 		},
 	},
 	{
