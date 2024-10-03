@@ -90,8 +90,8 @@ export const createEntry = async (data: Buffer) => {
 		console.log("updating sensor's status to false...");
 		logger.info("updating sensor's status to false...");
 		await sensorsResolvers.Mutation.updateStatusSensor(null, {
-		    _id: currSensor._id.toString(),
-		    status: false,
+			_id: currSensor._id.toString(),
+			status: false,
 		});
 	}
 };
