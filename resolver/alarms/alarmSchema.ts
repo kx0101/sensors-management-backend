@@ -1,6 +1,6 @@
 export const alarmType = `#graphql
 	type Query {
-		alarms: [Alarm]
+        alarms(limit: Int, offset: Int): [Alarm]
 		alarm(sensor: SensorInput!): [Alarm]
         getAlarmByAddressAndId(address: String!, sensor: Int!): Alarm
         getAlarmsByAknowledged(aknowledged: Boolean): [Alarm]
