@@ -46,7 +46,9 @@ export class Alarmbell extends SerialPort {
 		BellRepo.watch().on("change", async (data) => {
 			if (data.operationType === "update") {
 				this.disabled = data.updateDescription.updatedFields.status;
-				logger.info("Bell is ", this.disabled ? "enabled" : "disabled");
+				logger.info(
+					"Bell is " + (this.disabled ? "enabled" : "disabled"),
+				);
 			}
 		});
 

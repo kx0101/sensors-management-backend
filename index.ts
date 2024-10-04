@@ -2,6 +2,7 @@ import express from "express";
 import { connectDB } from "./config/db";
 import { logger } from "./config/logger";
 import { router as userRoutes } from "./routes/userRoutes";
+import { router as bellRoutes } from "./routes/bellRoutes";
 import { errorHandler, notFound } from "./middleware/errorMiddleware";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
@@ -17,6 +18,7 @@ import { Alarmbell } from "./config/alarmbell";
 import dotnev from "dotenv";
 
 dotnev.config();
+export const alarmBell = new Alarmbell();
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 const app = express();
 const httpServer = createServer(app);
@@ -64,6 +66,7 @@ apolloServer.start().then(() => {
 	});
 
 	app.use("/v1/users", userRoutes);
+	app.use("/v1/bells", bellRoutes);
 	//Temporary fix for favicon.ico on playground
 	app.use("/favicon.ico", (_req, res) => res.status(204));
 
@@ -74,18 +77,12 @@ apolloServer.start().then(() => {
 
 	connectDB().then(() => gatewayClient.connect());
 
-	const alarmBell = new Alarmbell();
-	process.on("SIGINT", () => {
-		logger.warn("Gracefully closing serial connection...");
-		alarmBell.close();
-	});
-
 	httpServer.listen(PORT, () => {
 		logger.info(`http Server is running on port ${PORT}`);
 	});
 
 	wsServer.once("listening", () => {
-		logger.info(`WebSocket: Server is running on /subscriptions`);
+		logger.info(`WebSocket: Server is running on /graphql`);
 	});
 
 	wsServer.on("connection", (socket) => {
@@ -109,5 +106,10 @@ apolloServer.start().then(() => {
 
 	wsServer.on("error", (error) => {
 		logger.error(`WebSocket: ${error.message}`);
+	});
+
+	process.on("SIGINT", () => {
+		logger.warn("Gracefully closing serial connection...");
+		alarmBell.close();
 	});
 });
