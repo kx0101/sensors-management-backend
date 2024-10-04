@@ -6,6 +6,7 @@ export const sensorType = `#graphql
         getSensorsByBuilding(building: String!): [Sensor]
         getSensorUniqueBuildings: [String]
         getSensorsByBatch(inputs: [SensorBatchInput!]!): [Sensor!]!
+        getSensorEntriesLast24Hours(sensors: [SensorBatchInput!]!): [AverageEntry]
 	}
 
 	type Mutation {
@@ -14,6 +15,12 @@ export const sensorType = `#graphql
 		deleteSensor(_id: ID!): Sensor
         updateStatusSensor(_id: ID!, status: Boolean!): Sensor
 	}
+
+    type AverageEntry {
+        sensorId: Int!
+        averages: [Float!]!
+        address: String!
+    }
 
 	type Sensor {
 		_id: ID!
