@@ -13,7 +13,6 @@ import { createServer } from "http";
 import { WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import cors from "cors";
 import { Alarmbell } from "./config/alarmbell";
 import dotnev from "dotenv";
 
@@ -54,13 +53,11 @@ apolloServer.start().then(() => {
 	app.use(
 		"/graphql",
 		express.json(),
-		cors<cors.CorsRequest>(),
 		expressMiddleware(apolloServer),
 	);
 
 	app.use(express.urlencoded({ extended: true }));
 	app.use(express.json());
-	app.use(cors());
 	app.get("/test", (req, res) => {
 		res.status(200).json({ message: "Test route working!" });
 	});
