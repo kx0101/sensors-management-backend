@@ -50,11 +50,7 @@ const apolloServer = new ApolloServer({
 const PORT = process.env.PORT || 3000;
 
 apolloServer.start().then(() => {
-	app.use(
-		"/graphql",
-		express.json(),
-		expressMiddleware(apolloServer),
-	);
+	app.use("/graphql", express.json(), expressMiddleware(apolloServer));
 
 	app.use(express.urlencoded({ extended: true }));
 	app.use(express.json());
