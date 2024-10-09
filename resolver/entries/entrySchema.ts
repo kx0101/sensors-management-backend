@@ -1,6 +1,7 @@
 export const entryType = `#graphql
 	type Query {
 		entries(sensor: EntryID!): [Entry]
+        entry(sensorAddress: String!, sensorId: Int!): Entry
 	}
 	type Mutation {
 		createEntry(entryInput: EntryCreate!): Entry

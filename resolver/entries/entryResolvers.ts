@@ -19,6 +19,29 @@ export const entriesResolvers = {
 
 			return res;
 		},
+		entry: async (
+			_: unknown,
+			{
+				sensorAddress,
+				sensorId,
+			}: { sensorAddress: string; sensorId: number },
+		) => {
+			try {
+				const res = await EntryRepo.find({
+					sensor: sensorId,
+					address: sensorAddress,
+				})
+					.sort({ createdAt: -1 })
+					.limit(1);
+
+				if (!res || res.length === 0) return null;
+
+				return res[0];
+			} catch (err) {
+				logger.error(err.message);
+				return null;
+			}
+		},
 	},
 	Mutation: {
 		createEntry: async (

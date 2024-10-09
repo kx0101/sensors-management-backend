@@ -14,6 +14,7 @@ import { WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { Alarmbell } from "./config/alarmbell";
+import cors from "cors";
 import dotnev from "dotenv";
 
 dotnev.config();
@@ -50,10 +51,16 @@ const apolloServer = new ApolloServer({
 const PORT = process.env.PORT || 3000;
 
 apolloServer.start().then(() => {
-	app.use("/graphql", express.json(), expressMiddleware(apolloServer));
+	app.use(
+		"/graphql",
+		express.json(),
+		cors<cors.CorsRequest>(),
+		expressMiddleware(apolloServer),
+	);
 
 	app.use(express.urlencoded({ extended: true }));
 	app.use(express.json());
+	app.use(cors());
 	app.get("/test", (req, res) => {
 		res.status(200).json({ message: "Test route working!" });
 	});

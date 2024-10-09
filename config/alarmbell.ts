@@ -9,7 +9,7 @@ export class Alarmbell extends SerialPort {
 
 	constructor() {
 		super({
-			path: "/dev/tty.usbmodem11401",
+			path: "/dev/ttyS0",
 			baudRate: 9600,
 			autoOpen: false,
 			lock: false,
@@ -34,10 +34,10 @@ export class Alarmbell extends SerialPort {
 
 	private checkAndWriteBellStatus() {
 		if (this.status && !this.disabled) {
-			this.write("ATR1 1\n");
+			this.write("ATR1 1\r\n");
 			logger.info("Alarm bell is on");
 		} else {
-			this.write("ATR1 0\n");
+			this.write("ATR1 0\r\n");
 			logger.info("Alarm bell is off");
 		}
 	}
@@ -74,9 +74,9 @@ export class Alarmbell extends SerialPort {
 		}
 
 		logger.info("Testing bell...");
-		this.write("ATR1 1\n");
+		this.write("ATR1 1\r\n");
 		setTimeout(() => {
-			this.write("ATR1 0\n");
+			this.write("ATR1 0\r\n");
 		}, 5000);
 	}
 }
