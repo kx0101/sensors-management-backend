@@ -41,7 +41,7 @@ export class Alarmbell extends SerialPort {
 	}
 
 	private checkAndWriteBellStatus() {
-		if (this.alarmAknowledge && !this.status) {
+		if (!this.alarmAknowledge && this.status) {
 			this.write("ATR1 1\r\n");
 			logger.info("Alarm bell is on");
 		} else {
@@ -59,7 +59,7 @@ export class Alarmbell extends SerialPort {
 		});
 
 		AlarmRepo.watch().on("change", async (data) => {
-			if (this.status) return;
+			if (!this.status) return;
 
 			if (data.operationType === "update") {
 				if (data.updateDescription.updatedFields.aknowledged) {

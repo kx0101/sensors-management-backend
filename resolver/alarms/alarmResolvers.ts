@@ -7,6 +7,7 @@ import type {
 	SensorID,
 	SensorInput,
 } from "./alarms.d";
+import { alarmBell } from "../..";
 
 const pubsub = new PubSub();
 export const alarmResolvers = {
@@ -74,6 +75,8 @@ export const alarmResolvers = {
 			).catch((err: Error) => {
 				logger.error(err.message);
 			});
+
+			alarmBell.checkAndWriteBellStatus();
 			return updateAlarm;
 		},
 		deleteAlarms: async (_: unknown, { sensor }: { sensor: SensorID }) => {
