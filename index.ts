@@ -18,7 +18,13 @@ import cors from "cors";
 import dotnev from "dotenv";
 
 dotnev.config();
-export const alarmBell = new Alarmbell();
+export let alarmBell = null;
+
+connectDB().then(() => {
+	gatewayClient.connect();
+	alarmBell = new Alarmbell();
+});
+
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 const app = express();
 const httpServer = createServer(app);
@@ -74,8 +80,6 @@ apolloServer.start().then(() => {
 	app.use(errorHandler);
 
 	logger.info("Apollo Server is running on /graphql");
-
-	connectDB().then(() => gatewayClient.connect());
 
 	httpServer.listen(PORT, () => {
 		logger.info(`http Server is running on port ${PORT}`);

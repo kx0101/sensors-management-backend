@@ -2,10 +2,11 @@ import { SerialPort } from "serialport";
 import { logger } from "./logger";
 import { AlarmRepo } from "../models/alarm";
 import { BellRepo } from "../models/bell";
+import { bellResolvers } from "../resolver/bell/bellResolvers";
 
 export class Alarmbell extends SerialPort {
+	public alarmAknowledge: boolean = false;
 	public status: boolean = false;
-	public disabled: boolean = false;
 
 	constructor() {
 		super({
@@ -15,10 +16,14 @@ export class Alarmbell extends SerialPort {
 			lock: false,
 		});
 
-		this.on("open", () => {
+		this.on("open", async () => {
 			logger.info("Serial port opened successfully");
-			this.registerListeners();
-			this.checkAndWriteBellStatus();
+
+			await this.getAlarmBell().then((status: boolean) => {
+				this.setStatus(status);
+				this.registerListeners();
+				this.checkAndWriteBellStatus();
+			});
 		});
 
 		this.on("error", (err) => {
@@ -33,7 +38,7 @@ export class Alarmbell extends SerialPort {
 	}
 
 	private checkAndWriteBellStatus() {
-		if (this.status && !this.disabled) {
+		if (this.alarmAknowledge && !this.status) {
 			this.write("ATR1 1\r\n");
 			logger.info("Alarm bell is on");
 		} else {
@@ -45,28 +50,41 @@ export class Alarmbell extends SerialPort {
 	private registerListeners() {
 		BellRepo.watch().on("change", async (data) => {
 			if (data.operationType === "update") {
-				this.disabled = data.updateDescription.updatedFields.status;
-				logger.info(
-					"Bell is " + (this.disabled ? "enabled" : "disabled"),
-				);
+				this.status = data.updateDescription.updatedFields.status;
+				logger.info("Bell is " + (this.status ? "enabled" : "status"));
 			}
 		});
 
 		AlarmRepo.watch().on("change", async (data) => {
-			if (this.disabled) return;
+			if (this.status) return;
 
 			if (data.operationType === "update") {
 				if (data.updateDescription.updatedFields.aknowledged) {
-					this.status = false;
+					this.alarmAknowledge = false;
 				} else {
-					this.status = true;
+					this.alarmAknowledge = true;
 				}
 
-				logger.info("Alarm is " + (this.status ? "closed" : "open"));
+				logger.info(
+					"Alarm is " + (this.alarmAknowledge ? "closed" : "open"),
+				);
 			}
 
 			this.checkAndWriteBellStatus();
 		});
+	}
+
+	private async getAlarmBell() {
+		try {
+			const bell = await bellResolvers.Query.bell();
+			const { status } = bell;
+
+			return status;
+		} catch (error) {
+			logger.error("getAlarmBell error: ", error);
+			console.log(error);
+			return false;
+		}
 	}
 
 	public testBell() {
@@ -80,5 +98,9 @@ export class Alarmbell extends SerialPort {
 		setTimeout(() => {
 			this.write("ATR1 0\r\n");
 		}, 5000);
+	}
+
+	public setStatus(status: boolean) {
+		this.status = status;
 	}
 }
