@@ -55,6 +55,7 @@ export const alarmResolvers = {
 				address: alarmInput.address,
 				sensor: alarmInput.sensor,
 				reason: alarmInput.reason,
+				aknowledged: false,
 			}).catch((err: Error) => {
 				logger.error(err.message);
 			});
