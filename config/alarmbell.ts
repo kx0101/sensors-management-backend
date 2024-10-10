@@ -20,6 +20,9 @@ export class Alarmbell extends SerialPort {
 			logger.info("Serial port opened successfully");
 
 			await this.getAlarmBell().then((status: boolean) => {
+				logger.info("status of the bell from db: ", status);
+				console.log("status of the bell from db: ", status);
+
 				this.setStatus(status);
 				this.registerListeners();
 				this.checkAndWriteBellStatus();
