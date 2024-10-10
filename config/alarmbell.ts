@@ -25,6 +25,7 @@ export class Alarmbell extends SerialPort {
 
 				this.setStatus(status);
 				this.registerListeners();
+				this.setAlarmAknowledge(true);
 				this.checkAndWriteBellStatus();
 			});
 		});
@@ -57,24 +58,6 @@ export class Alarmbell extends SerialPort {
 				logger.info("Bell is " + (this.status ? "enabled" : "status"));
 			}
 		});
-
-		AlarmRepo.watch().on("change", async (data) => {
-			if (!this.status) return;
-
-			if (data.operationType === "update") {
-				if (data.updateDescription.updatedFields.aknowledged) {
-					this.alarmAknowledge = false;
-				} else {
-					this.alarmAknowledge = true;
-				}
-
-				logger.info(
-					"Alarm is " + (this.alarmAknowledge ? "closed" : "open"),
-				);
-			}
-
-			this.checkAndWriteBellStatus();
-		});
 	}
 
 	private async getAlarmBell() {
@@ -88,6 +71,10 @@ export class Alarmbell extends SerialPort {
 			console.log(error);
 			return false;
 		}
+	}
+
+	private setAlarmAknowledge(alarmAknowledge: boolean) {
+		this.alarmAknowledge = alarmAknowledge;
 	}
 
 	public testBell() {

@@ -60,7 +60,12 @@ export const alarmResolvers = {
 			}).catch((err: Error) => {
 				logger.error(err.message);
 			});
+
+			alarmBell.setAlarmAknowledge(false);
+			alarmBell.checkAndWriteBellStatus();
+
 			pubsub.publish("ALARM_CREATED", { alarmCreated: alarm });
+
 			return alarm;
 		},
 		updateAlarm: async (
@@ -76,7 +81,9 @@ export const alarmResolvers = {
 				logger.error(err.message);
 			});
 
+			alarmBell.setAlarmAknowledge(true);
 			alarmBell.checkAndWriteBellStatus();
+
 			return updateAlarm;
 		},
 		deleteAlarms: async (_: unknown, { sensor }: { sensor: SensorID }) => {
